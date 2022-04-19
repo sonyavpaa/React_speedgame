@@ -1,0 +1,26 @@
+.circles {
+  width: 10em;
+  height: 10em;
+  border: 3px solid white;
+  border-radius: 50%;
+  margin: 1em;
+  margin-top: 4em;
+  background-size: cover;
+  background-color: pink;
+
+  cursor: pointer;
+  display: flex;
+  place-items: center;
+}
+
+img {
+  margin-left: 1.7em;
+  width: 6em;
+  height: 6em;
+  visibility: visible;
+}
+
+.active {
+  width: 10em;
+  height: 10em;
+}

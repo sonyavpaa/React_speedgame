@@ -1,0 +1,27 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(66, 70, 59, 0.625);
+  display: grid;
+  justify-items: center;
+  align-items: center;
+}
+
+.alertMessageBox {
+  display: flex;
+  place-content: center;
+  align-items: center;
+  visibility: visible;
+  position: relative;
+  width: 20em;
+  height: 7em;
+  background-color: whitesmoke;
+  border: 5px solid rgb(221, 202, 252);
+}
+
+.alertMessageBox p span {
+  color: red;
+}
