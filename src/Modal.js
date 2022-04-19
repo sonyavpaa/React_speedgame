@@ -1,10 +1,19 @@
 import "./Modal.css";
 
 const Modal = (props) => {
+  let message = "";
+  if (props.score <= 5) {
+    message = "Your poor score is:";
+  } else if (props.score <= 20) {
+    message = "Your silly score is:";
+  } else if (props.score > 20) {
+    message = "Your cool score is:";
+  }
   return (
     <div className="overlay" onClick={props.onClick}>
       <div className="alertMessageBox">
-        <div className="scoreText">{props.children}</div>
+        {message}&nbsp;
+        {props.children}
       </div>
     </div>
   );

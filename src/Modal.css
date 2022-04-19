@@ -22,6 +22,6 @@
   border: 5px solid rgb(221, 202, 252);
 }
 
-.alertMessageBox p span {
+.alertMessageBox span {
   color: red;
 }

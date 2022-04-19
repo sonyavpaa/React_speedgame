@@ -5,6 +5,14 @@ import Circle from "./uiComp/Circle";
 import Button from "./uiComp/Button";
 import Modal from "./Modal";
 
+import startSound from "./assets/sounds/01.mp3";
+import stopSound from "./assets/sounds/02.mp3";
+import clickSound from "./assets/sounds/03.mp3";
+
+let luvSound = new Audio(clickSound);
+let startMusic = new Audio(startSound);
+let stopMusic = new Audio(stopSound);
+
 const randomNumber = (min, max) => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
@@ -13,15 +21,14 @@ class App extends Component {
   state = {
     score: 0,
     current: -1,
-    alertMessage: "Your silly score:",
     show: false,
     pace: 1500,
     rounds: 0,
     gameon: false,
+    clicked: -1,
 
     nextCircle: 0,
     newCircle: 0,
-    img: "",
   };
 
   timer = undefined;
@@ -29,14 +36,26 @@ class App extends Component {
   circles = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }];
 
   clickCircle = (i) => {
+    this.clickPlay();
+    if (i !== this.state.clicked) {
+      this.setState({
+        score: this.state.score + 1,
+        rounds: this.state.rounds - 1,
+        clicked: i,
+      });
+    }
     if (this.state.current !== i) {
       this.stopHandler();
       return;
     }
-    this.setState({
-      score: this.state.score + 1,
-      rounds: this.state.rounds - 1,
-    });
+  };
+
+  clickPlay = () => {
+    if (luvSound.paused) {
+      luvSound.play();
+    } else {
+      luvSound.currentTime = 0;
+    }
   };
 
   nextCircle = () => {
@@ -55,79 +74,34 @@ class App extends Component {
       pace: this.state.pace * 0.95,
       rounds: this.state.rounds + 1,
     });
-
     console.log("acive circle:", this.state.current);
-
     this.timer = setTimeout(this.nextCircle, this.state.pace);
   };
 
   refreshGame = () => {
     window.location.reload();
-    // this.setState({
-    //   show: false,
-    //   score: 0,
-    //   current: -1,
-    // });
   };
 
-  // startGame = () => {
-  //   this.nextCircle();
-  // };
-
   startHandler = () => {
+    startMusic.play();
+    startMusic.loop = true;
     this.nextCircle();
     this.setState({
       gameon: true,
     });
   };
 
-  // stopGame = () => {
-  //   console.log("stopped");
-  //   clearTimeout(this.timer);
-  //   this.setState({
-  //     show: true,
-  //   });
-  // };
-
   stopHandler = () => {
     console.log("stopped");
     clearTimeout(this.timer);
+    startMusic.pause();
+    startMusic.currentTime = 0;
+    stopMusic.play();
     this.setState({
       show: true,
       gameon: false,
     });
   };
-
-  // sound(src) {
-  //   this.sound = document.createElement("audio");
-  //   this.sound.src = src;
-  //   this.sound.setAttribute("preload", "auto");
-  //   this.sound.setAttribute("controls", "none");
-  //   this.sound.style.display = "none";
-  //   document.body.appendChild(this.sound);
-  //   this.play = function () {
-  //     this.sound.play();
-  //   };
-  //   this.stop = function () {
-  //     this.sound.pause();
-  //   };
-  // }
-
-  // startGameMusic = () => {
-  //   let startSound = new sound("./assets/sounds/01.mp3");
-  //   startSound.play();
-  // };
-
-  // endGameMusic = () => {
-  //   let endSound = new sound("./assets/sounds/02.mp3");
-  //   startSound.stop();
-  //   endSound.play();
-  // };
-
-  // luvPoint = () => {
-  //   let luvSound = new sound("./assets/sounds/03.mp3");
-  //   luvSound.play();
-  // };
 
   render() {
     return (
@@ -150,18 +124,18 @@ class App extends Component {
           })}
         </div>
         <div className="buttonsContainer">
-          <Button onClick={this.startHandler}>start</Button>
-          <Button onClick={this.stopHandler}>stop</Button>
+          {!this.state.gameon && (
+            <Button onClick={this.startHandler}>start</Button>
+          )}
+          {this.state.gameon && (
+            <Button onClick={this.stopHandler}>stop</Button>
+          )}
         </div>
         {this.state.show && (
           <Modal
             onClick={this.refreshGame}
-            children={
-              <p>
-                {`${this.state.alertMessage}`}
-                <span>{` ${this.state.score}`}</span>
-              </p>
-            }
+            score={this.state.score}
+            children={<span>{`${this.state.score}`}</span>}
           />
         )}
       </div>
