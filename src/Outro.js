@@ -1,6 +1,6 @@
-import "./Modal.css";
+import "./Outro.css";
 
-const Modal = (props) => {
+const Outro = (props) => {
   let message = "";
   if (props.score <= 5) {
     message = "Your poor score is:";
@@ -19,4 +19,4 @@ const Modal = (props) => {
   );
 };
 
-export default Modal;
+export default Outro;

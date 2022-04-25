@@ -3,7 +3,8 @@ import React, { Component } from "react";
 
 import Circle from "./uiComp/Circle";
 import Button from "./uiComp/Button";
-import Modal from "./Modal";
+import Outro from "./Outro";
+// import Intro from "./Intro";
 
 import startSound from "./assets/sounds/01.mp3";
 import stopSound from "./assets/sounds/02.mp3";
@@ -26,6 +27,7 @@ class App extends Component {
     rounds: 0,
     gameon: false,
     clicked: -1,
+    difficulty: "",
 
     nextCircle: 0,
     newCircle: 0,
@@ -33,7 +35,60 @@ class App extends Component {
 
   timer = undefined;
 
-  circles = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }];
+  easyCircles = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }];
+  crazyCircles = [
+    { id: 1 },
+    { id: 2 },
+    { id: 3 },
+    { id: 4 },
+    { id: 5 },
+    { id: 6 },
+  ];
+  insaneCircles = [
+    { id: 1 },
+    { id: 2 },
+    { id: 3 },
+    { id: 4 },
+    { id: 5 },
+    { id: 6 },
+    { id: 7 },
+    { id: 8 },
+  ];
+
+  difficultyHandler = (e) => {
+    console.log(e.target.textContent);
+    switch (e.target.textContent) {
+      case "easy":
+        this.setState({ difficulty: "easy" });
+        break;
+      case "crazy":
+        this.setState({ difficulty: "crazy" });
+        break;
+      case "insane":
+        this.setState({ difficulty: "insane" });
+        break;
+    }
+  };
+
+  // circlesAmount = (e) => {
+  //   let circles = [];
+  //   switch (e.target.textContent) {
+  //     case "easy":
+  //       circles = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }];
+  //       break;
+  //     case "medium":
+  //       circles = [
+  //         { id: 1 },
+  //         { id: 2 },
+  //         { id: 3 },
+  //         { id: 4 },
+  //         { id: 5 },
+  //         { id: 6 },
+  //       ];
+  //       break;
+  //   }
+  //   this.circles = circles;
+  // };
 
   clickCircle = (i) => {
     this.clickPlay();
@@ -74,7 +129,6 @@ class App extends Component {
       pace: this.state.pace * 0.95,
       rounds: this.state.rounds + 1,
     });
-    console.log("acive circle:", this.state.current);
     this.timer = setTimeout(this.nextCircle, this.state.pace);
   };
 
@@ -92,7 +146,6 @@ class App extends Component {
   };
 
   stopHandler = () => {
-    console.log("stopped");
     clearTimeout(this.timer);
     startMusic.pause();
     startMusic.currentTime = 0;
@@ -105,39 +158,96 @@ class App extends Component {
 
   render() {
     return (
-      <div className="game">
+      <div className="frame">
         <h1>Catching Luv</h1>
-        <h2>
-          Luv catched: <span>{this.state.score}</span>
-        </h2>
-        <div className="circlesContainer">
-          {this.circles.map((_, i) => {
-            return (
-              <Circle
-                key={i}
-                id={i}
-                disabled={this.state.gameon}
-                onClick={() => this.clickCircle(i)}
-                active={this.state.current === i}
+        {!this.state.difficulty && [
+          <div className="levelsContainer">
+            <h2>Choose difficulty!</h2>
+            <div>
+              <Button
+                key={"easy"}
+                children={"easy"}
+                onClick={this.difficultyHandler}
               />
-            );
-          })}
-        </div>
-        <div className="buttonsContainer">
-          {!this.state.gameon && (
-            <Button onClick={this.startHandler}>start</Button>
+              <Button
+                key={"crazy"}
+                children={"crazy"}
+                onClick={this.difficultyHandler}
+              />
+              <Button
+                key={"insane"}
+                children={"insane"}
+                onClick={this.difficultyHandler}
+              />
+            </div>
+          </div>,
+        ]}
+
+        <div className="game">
+          <h2>
+            Luv catched: <span>{this.state.score}</span>
+          </h2>
+          <div className="circlesContainer">
+            {/* circles for easy */}
+            {this.state.difficulty === "easy" && [
+              this.easyCircles.map((_, i) => {
+                return (
+                  <Circle
+                    key={i}
+                    id={i}
+                    disabled={this.state.gameon}
+                    onClick={() => this.clickCircle(i)}
+                    active={this.state.current === i}
+                  />
+                );
+              }),
+            ]}
+            {/* circles for crazy */}
+
+            {this.state.difficulty === "crazy" && [
+              this.crazyCircles.map((_, i) => {
+                return (
+                  <Circle
+                    key={i}
+                    id={i}
+                    disabled={this.state.gameon}
+                    onClick={() => this.clickCircle(i)}
+                    active={this.state.current === i}
+                  />
+                );
+              }),
+            ]}
+            {/* circles for insane */}
+            {this.state.difficulty === "insane" && [
+              this.insaneCircles.map((_, i) => {
+                return (
+                  <Circle
+                    key={i}
+                    id={i}
+                    disabled={this.state.gameon}
+                    onClick={() => this.clickCircle(i)}
+                    active={this.state.current === i}
+                  />
+                );
+              }),
+            ]}
+          </div>
+          <div className="buttonsContainer">
+            {!this.state.gameon && (
+              <Button onClick={this.startHandler}>start</Button>
+            )}
+            {this.state.gameon && (
+              <Button onClick={this.stopHandler}>stop</Button>
+            )}
+          </div>
+          {this.state.show && (
+            <Outro
+              onClick={this.refreshGame}
+              score={this.state.score}
+              children={<span>{`${this.state.score}`}</span>}
+            />
           )}
-          {this.state.gameon && (
-            <Button onClick={this.stopHandler}>stop</Button>
-          )}
         </div>
-        {this.state.show && (
-          <Modal
-            onClick={this.refreshGame}
-            score={this.state.score}
-            children={<span>{`${this.state.score}`}</span>}
-          />
-        )}
       </div>
     );
   }
