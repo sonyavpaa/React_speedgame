@@ -1,4 +1,4 @@
-import "./Outro.css";
+import "../style/Outro.css";
 
 const Outro = (props) => {
   let message = "";

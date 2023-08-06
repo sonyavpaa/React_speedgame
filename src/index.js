@@ -1,4 +1,4 @@
-import "./index.css";
+import "./style/index.css";
 import App from "./App";
 
 import ReactDOMClient from "react-dom/client";

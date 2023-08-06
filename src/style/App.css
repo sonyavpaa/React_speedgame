@@ -1,11 +1,11 @@
 .frame {
   display: flex;
   flex-direction: column;
+  margin-top: 2em;
   place-items: center;
 }
 
 .game {
-  margin-top: 3em;
   display: flex;
   flex-direction: column;
   place-items: center;
@@ -17,13 +17,17 @@ h2 {
   font-family: var(--ff__01);
 }
 
-h1 {
-  margin-top: 1em;
-}
 
 .circlesContainer {
   display: flex;
-  /* flex-direction: row; */
   flex-wrap: wrap;
-  width: 50vw;
+  justify-content: center;
+}
+
+.desktop {
+
+}
+
+.mobile {
+  transform: scale(0.7);
 }

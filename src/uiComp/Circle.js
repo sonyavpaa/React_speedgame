@@ -1,10 +1,10 @@
-import "./Circle.css";
+import "../style/Circle.css";
 import React from "react";
 
 const Circle = (props) => {
   return (
     <div
-      className="circles"
+      className={`circles ` + props.classes}
       style={{ pointerEvents: props.disabled ? "auto" : "none" }}
       onClick={props.onClick}
     >
